@@ -17,6 +17,8 @@ const corsOptions = {
 }
 
 app.use(cors(corsOptions));
+app.use(express.json());
+
 app.get('/', (req, res) => { res.send('Welcome to Todo API'); });
 app.use('/todos', todoRouter);
 
@@ -25,7 +27,7 @@ app.use((err, req: Request, res: Response, next: NextFunction) => {
         console.log(`Client Error: ${err.message}`)
         res.status(err.statusCode).json(err);
     } else {
-        res.status(500).json(err.message);
+        res.status(500).json("There's been a server error");
         console.error(err);
     }
 })

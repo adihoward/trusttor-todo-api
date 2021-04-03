@@ -1,4 +1,4 @@
-import { Db, MongoClient } from 'mongodb';
+import { Db, MongoClient, ObjectId } from 'mongodb';
 import { IDb } from '../interfaces/IDb.interface';
 
 export class MongoService implements IDb {
@@ -26,14 +26,14 @@ export class MongoService implements IDb {
         return await collection.findOne({ [identifyFieldName]: id });
     };
 
-    insertOne = async (collectionName: string, object: Object) => {
+    insertOne = async (collectionName: string, object: any) => {
         const collection = this.db.collection(collectionName);
         const result = await collection.insertOne(object);
         return result.ops[0];
     }
 
-    updateArray = async (collectionName: string, id: string, arrayField: string, object: Object) => {
+    updateOne = async (collectionName: string, id: string, object: any) => {
         const collection = this.db.collection(collectionName);
-        await collection.updateOne({ "_id": id }, { $push: { [arrayField]: object } });
+        await collection.updateOne({ _id: new ObjectId(id) },  {$set: object} );
     }
 }

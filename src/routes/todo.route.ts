@@ -1,16 +1,13 @@
-import { NextFunction, Request, Response, Router } from "express";
-import { todoService } from "..";
+import { Router } from "express";
+import { createTodo, getAllTodos, updateTodo } from "../controllers/todo.controller";
+import { validateTodoBodyRequest } from "../utils/requestValidation.utils";
 
 const todoRouter = Router();
 
-todoRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const todos = await todoService.getAllTodos();
-        res.send(todos);
-    } catch (err) {
-        next(err);
-    }
-});
+todoRouter.get('/', getAllTodos);
+todoRouter.post('/', validateTodoBodyRequest(), createTodo);
+todoRouter.put('/:id', validateTodoBodyRequest(), updateTodo);
+
 
 
 export default todoRouter;
