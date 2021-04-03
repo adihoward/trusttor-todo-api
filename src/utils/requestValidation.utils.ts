@@ -1,4 +1,4 @@
-import { body } from "express-validator"
+import { body, param } from "express-validator"
 
 const validateTodoBodyRequest = () => {
     return [
@@ -6,7 +6,6 @@ const validateTodoBodyRequest = () => {
         body('deadlineDate').isString()
     ]
 }
-
 
 export {validateTodoBodyRequest};
 

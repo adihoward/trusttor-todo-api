@@ -1,4 +1,5 @@
 import { updateTodo } from "../controllers/todo.controller";
+import { ClientError } from "../errors/client.error";
 import { IDb } from "../interfaces/IDb.interface";
 import { Todo } from "../types/todo.type";
 
@@ -36,4 +37,14 @@ export class TodoService {
             throw err
         }
     }
+    
+    deleteTodo = async (id: string) => {
+        try {
+            await this.dbService.deleteOne('todos', id);
+        } catch (err) {
+            throw new ClientError(400, "todo id is not valid");
+        }
+    }
+
+
 }

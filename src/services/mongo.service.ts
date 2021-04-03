@@ -36,4 +36,9 @@ export class MongoService implements IDb {
         const collection = this.db.collection(collectionName);
         await collection.updateOne({ _id: new ObjectId(id) },  {$set: object} );
     }
+    
+    deleteOne = async (collectionName: string, id: string) => {
+        const collection = this.db.collection(collectionName);
+        await collection.deleteOne({ _id: new ObjectId(id) });
+    }
 }
