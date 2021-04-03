@@ -13,7 +13,6 @@ const todoService = new TodoService(mongoService);
 const app = express()
 
 const corsOptions = {
-    // origin: 'http://localhost:3000'
     origin: '*'
 }
 
@@ -34,6 +33,5 @@ app.use((err, req: Request, res: Response, next: NextFunction) => {
 app.listen(process.env.PORT, () => {
     console.log(`Todo api listening at http://localhost:${process.env.PORT}`)
 });
-
 
 export {todoService};
