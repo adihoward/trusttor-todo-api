@@ -25,8 +25,8 @@ export class TodoService {
     createTodo = async (todo: Todo) => {
         try {
             const createdTodo = await this.dbService.insertOne('todos', todo);
+            this.notificationService.createNewNotification(createdTodo);
 
-            this.notificationService.sendTodoNoticationTask(createdTodo);
             return createdTodo;
         } catch (err) {
             throw err
@@ -36,6 +36,8 @@ export class TodoService {
     updateTodo = async (id: string, updatedTodo: Todo) => {
         try {
             await this.dbService.updateOne('todos', id, updatedTodo);
+            updatedTodo._id = id;
+            this.notificationService.editNotification(updatedTodo);
         } catch (err) {
             throw err
         }
@@ -44,6 +46,7 @@ export class TodoService {
     deleteTodo = async (id: string) => {
         try {
             await this.dbService.deleteOne('todos', id);
+            this.notificationService.cancelNotification({_id: id});
         } catch (err) {
             throw new ClientError(400, "todo id is not valid");
         }

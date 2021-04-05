@@ -1,5 +1,5 @@
 import { MongoService } from "./mongo.service";
-import { NotificationService } from "./notificationProducer.service";
+import { NotificationService } from "./notification.service";
 import { TodoService } from "./todo.service";
 
 let mongoService;

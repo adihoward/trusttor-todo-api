@@ -1,4 +1,5 @@
 export interface Todo {
-    description: string;
-    deadlineDate: Date;
+    _id?: string;
+    description?: string;
+    deadlineDate?: Date;
 }

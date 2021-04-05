@@ -1,5 +1,7 @@
 import { Todo } from "../types/todo.type";
 
 export interface INotificationService {
-    sendTodoNoticationTask: (todo: Todo) => void;
+    createNewNotification: (todo: Todo) => void;
+    editNotification: (todo: Todo) => void;
+    cancelNotification: (todo: Todo) => void;
 }
