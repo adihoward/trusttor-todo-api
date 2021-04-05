@@ -1,13 +1,15 @@
-import { updateTodo } from "../controllers/todo.controller";
 import { ClientError } from "../errors/client.error";
 import { IDb } from "../interfaces/IDb.interface";
+import { INotificationService } from "../interfaces/INotificationService.inteface";
 import { Todo } from "../types/todo.type";
 
 export class TodoService {
     private dbService: IDb;
+    private notificationService: INotificationService;
 
-    constructor(dbService: IDb) {
+    constructor(dbService: IDb, notificationService: INotificationService) {
         this.dbService = dbService;
+        this.notificationService = notificationService;
     }
 
     getAllTodos = async () => {
@@ -24,6 +26,7 @@ export class TodoService {
         try {
             const createdTodo = await this.dbService.insertOne('todos', todo);
 
+            this.notificationService.sendTodoNoticationTask(createdTodo);
             return createdTodo;
         } catch (err) {
             throw err
@@ -37,7 +40,7 @@ export class TodoService {
             throw err
         }
     }
-    
+
     deleteTodo = async (id: string) => {
         try {
             await this.dbService.deleteOne('todos', id);

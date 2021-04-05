@@ -1,16 +1,14 @@
-import {config} from 'dotenv';
+import { config } from 'dotenv';
 config();
 
 import cors from "cors";
 import express, { Request, Response, NextFunction } from "express";
 import { ClientError } from "./errors/client.error";
 import todoRouter from "./routes/todo.route";
-import { TodoService } from './services/todo.service';
-import { MongoService } from './services/mongo.service';
+import { initializeServices } from './services';
 
-const mongoService = new MongoService(process.env.MONGO_CONNECTION_URL);
-const todoService = new TodoService(mongoService);
 const app = express()
+initializeServices()
 
 const corsOptions = {
     origin: '*'
@@ -35,5 +33,3 @@ app.use((err, req: Request, res: Response, next: NextFunction) => {
 app.listen(process.env.PORT, () => {
     console.log(`Todo api listening at http://localhost:${process.env.PORT}`)
 });
-
-export {todoService};

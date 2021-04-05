@@ -1,7 +1,7 @@
 import { Response, Request, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
-import { todoService } from '..';
 import { ClientError } from '../errors/client.error';
+import { todoService } from '../services';
 import { Todo } from '../types/todo.type';
 
 const getAllTodos = async (req: Request, res: Response, next: NextFunction) => {
