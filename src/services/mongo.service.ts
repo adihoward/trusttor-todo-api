@@ -3,9 +3,14 @@ import { IDb } from '../interfaces/IDb.interface';
 
 export class MongoService implements IDb {
     private db: Db;
+    private mongoConnectionUrl: string;
 
     constructor(mongoConnectionUrl: string) {
-        MongoClient.connect(mongoConnectionUrl, { useUnifiedTopology: true }, (err, client) => {
+        this.mongoConnectionUrl = mongoConnectionUrl;
+    }
+
+    initialize = async () => {
+        return MongoClient.connect(this.mongoConnectionUrl, { useUnifiedTopology: true }, (err, client) => {
             if (err) {
                 console.error(err)
                 throw err;
@@ -34,9 +39,9 @@ export class MongoService implements IDb {
 
     updateOne = async (collectionName: string, id: string, object: any) => {
         const collection = this.db.collection(collectionName);
-        await collection.updateOne({ _id: new ObjectId(id) },  {$set: object} );
+        await collection.updateOne({ _id: new ObjectId(id) }, { $set: object });
     }
-    
+
     deleteOne = async (collectionName: string, id: string) => {
         const collection = this.db.collection(collectionName);
         await collection.deleteOne({ _id: new ObjectId(id) });

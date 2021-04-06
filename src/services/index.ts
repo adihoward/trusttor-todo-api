@@ -1,16 +1,21 @@
+import { AppServices } from "../types/appServices.type";
 import { MongoService } from "./mongo.service";
+import { MQProducerService } from "./mqProducer.service";
 import { NotificationService } from "./notification.service";
 import { TodoService } from "./todo.service";
 
-let mongoService;
-let notificationService;
-let todoService;
+export const initializeServices = async () => {
+    try {
+        const appServices: Partial<AppServices> = {};
+        appServices.mongoService = new MongoService(process.env.MONGO_CONNECTION_URL);
+        await appServices.mongoService.initialize();
+        appServices.mqProducerService = new MQProducerService(process.env.MQ_URL, process.env.MQ_QUEUE_NAME);
+        await appServices.mqProducerService.initialize();
+        appServices.notificationService = new NotificationService(appServices.mqProducerService);
+        appServices.todoService = new TodoService(appServices.mongoService, appServices.notificationService);
 
-export async function initializeServices() {
-    mongoService = new MongoService(process.env.MONGO_CONNECTION_URL);
-    notificationService = new NotificationService(process.env.MQ_URL, process.env.MQ_QUEUE_NAME);
-    notificationService.initialize()
-    todoService = new TodoService(mongoService, notificationService);
+        return appServices as AppServices;
+    } catch (err) {
+        throw err;
+    }
 }
-
-export {mongoService, notificationService, todoService};
